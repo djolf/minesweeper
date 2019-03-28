@@ -1,0 +1,37 @@
+.tile {
+  border: 1px solid #999;
+  background: #eee;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:active {
+    background: #ccc;
+  }
+
+  &.flagged::before {
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 900; 
+    content: "\f024";
+    color: red;
+  }
+
+  span {
+    display: none;
+  }
+
+  &.open {
+    span {
+      display: inline;
+    }
+    &.bomb::before {
+      font-family: "Font Awesome 5 Free"; 
+      font-weight: 900; 
+      content: "\f1e2";
+      color: #333;
+    }
+  }
+
+} 
