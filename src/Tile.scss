@@ -6,6 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   &:active {
     background: #ccc;
@@ -26,11 +27,16 @@
     span {
       display: inline;
     }
-    &.bomb::before {
-      font-family: "Font Awesome 5 Free"; 
-      font-weight: 900; 
-      content: "\f1e2";
-      color: #333;
+    &.bomb {
+      span {
+        display: none;
+      }
+      &::before {
+        font-family: "Font Awesome 5 Free"; 
+        font-weight: 900; 
+        content: "\f1e2";
+        color: #333;
+      }
     }
   }
 

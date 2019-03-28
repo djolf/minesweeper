@@ -5,7 +5,7 @@ import Board from './Board';
 class Game extends Component {
   render() {
     return (
-      <Board></Board>
+      <Board row="15" col="15" mines="80"></Board>
     );
   }
 }

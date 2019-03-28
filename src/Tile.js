@@ -13,6 +13,7 @@ class Tile extends Component {
   }
 
   click() {
+    console.log(`(${this.props.x},${this.props.y})`);
     if (!this.state.isOpen && !this.state.isFlagged) {
       this.setState({
         isOpen: true
@@ -33,7 +34,7 @@ class Tile extends Component {
     let classes = `tile${this.state.isFlagged?' flagged':''}`;
     if (this.state.isOpen) {
       classes += ' open';
-      if (this.props.isBomb==='true') {
+      if (this.props.isBomb) {
         classes += ' bomb';
       }
     }
