@@ -1,49 +1,58 @@
-import React, { Component } from 'react';
+import React, {useState, useEffect} from 'react';
 import './Tile.scss';
 
-class Tile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFlagged: false,
-      isOpen: false,
+const Tile = props => {
+  const [isFlagged, setIsFlagged] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    gameStatusChanged(props.gameStatus);
+  }, [props.gameStatus]);
+
+  const gameStatusChanged = gameStatus => {
+    if (gameStatus === 1) {
+      // gameover
+      if (!isFlagged) {
+        setIsOpen(true);
+      }
     }
-    this.click = this.click.bind(this);
-    this.rightClick = this.rightClick.bind(this);
+    
   }
 
-  click() {
-    console.log(`(${this.props.x},${this.props.y})`);
-    if (!this.state.isOpen && !this.state.isFlagged) {
-      this.setState({
-        isOpen: true
-      });
-    }
-  }
-
-  rightClick(e) {
-    e.preventDefault();
-    if (!this.state.isOpen) {
-      this.setState({
-        isFlagged: !this.state.isFlagged,
-      });
-    }
-  }
-
-  render() {
-    let classes = `tile${this.state.isFlagged?' flagged':''}`;
-    if (this.state.isOpen) {
+  const getClasses = () => {
+    let classes = `tile${isFlagged?' flagged':''}`;
+    if (isOpen) {
       classes += ' open';
-      if (this.props.isBomb) {
+      if (props.isBomb) {
         classes += ' bomb';
       }
     }
-    return (
-      <div className={classes} onClick={this.click} onContextMenu={this.rightClick}>
-        <span>{this.props.num}</span>
-      </div>
-    );
+    return classes;
   }
+
+
+  const click = () => {
+    if (!isOpen && !isFlagged) {
+      if (props.isBomb) {
+        props.gameOver();
+      }
+      setIsOpen(true);
+    }
+  }
+
+  const rightClick = e => {
+    e.preventDefault();
+    if (!isOpen) {
+      setIsFlagged(!isFlagged);
+    }
+  }
+
+  
+  return (
+    <div className={getClasses()} onClick={click.bind(this)} onContextMenu={rightClick.bind(this)}>
+      <span>{props.num}</span>
+    </div>
+  );
 }
 
 export default Tile;
