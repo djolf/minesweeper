@@ -164,7 +164,7 @@ const Board = props => {
         <div className="timer"></div>
         <div className="new-game" onClick={props.newGame}>New Game</div>
         <div className="quantity">Mines Left: {minesLeft}</div>
-        <div>Game Status: {displayGameStatus()}</div>
+        {/* <div>Game Status: {displayGameStatus()}</div> */}
         {gameStatus > 0 && 
           <div className="result">
             You've {displayGameStatus()}
