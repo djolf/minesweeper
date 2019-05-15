@@ -3,11 +3,17 @@ import './Tile.scss';
 
 const Tile = props => {
   const [isFlagged, setIsFlagged] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(props.isOpen);
 
   useEffect(() => {
     gameStatusChanged(props.gameStatus);
   }, [props.gameStatus]);
+
+  useEffect(() => {
+    if (props.isOpen) {
+      click();
+    } 
+  }, [props.isOpen]);
 
   const gameStatusChanged = gameStatus => {
     if (gameStatus === 1) {
@@ -16,7 +22,6 @@ const Tile = props => {
         setIsOpen(true);
       }
     }
-    
   }
 
   const getClasses = () => {
@@ -30,26 +35,34 @@ const Tile = props => {
     return classes;
   }
 
+  function printXY() {
+    return props.x+','+props.y;
+  }
 
   const click = () => {
     if (!isOpen && !isFlagged) {
+      setIsOpen(true);
+      props.updateBoard(props.x,props.y,props.num);
       if (props.isBomb) {
         props.gameOver();
+      // } else {
+        // if (props.num===0) {
+        //   props.openAdjacent(props.x,props.y);
+        // }
       }
-      setIsOpen(true);
     }
   }
 
   const rightClick = e => {
     e.preventDefault();
-    if (!isOpen) {
+    if (!isOpen && props.gameStatus===0) {
       setIsFlagged(!isFlagged);
     }
   }
 
   
   return (
-    <div className={getClasses()} onClick={click.bind(this)} onContextMenu={rightClick.bind(this)}>
+    <div className={getClasses()} onClick={click} onContextMenu={rightClick.bind(this)}>
       <span>{props.num}</span>
     </div>
   );
