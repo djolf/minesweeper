@@ -4,19 +4,19 @@ self.__precacheManifest = [
     "url": "/minesweeper/static/js/runtime~main.dd26f679.js"
   },
   {
-    "revision": "bfac41c6ff43cb4cad6d",
-    "url": "/minesweeper/static/js/main.24012bb9.chunk.js"
+    "revision": "ca3d5212e5c84fb6edfd",
+    "url": "/minesweeper/static/js/main.84acdded.chunk.js"
   },
   {
     "revision": "c63d85398e1a472bd830",
     "url": "/minesweeper/static/js/2.72912114.chunk.js"
   },
   {
-    "revision": "bfac41c6ff43cb4cad6d",
-    "url": "/minesweeper/static/css/main.5e982e33.chunk.css"
+    "revision": "ca3d5212e5c84fb6edfd",
+    "url": "/minesweeper/static/css/main.76168870.chunk.css"
   },
   {
-    "revision": "7092a9a518cdcae73cdf98d420b381df",
+    "revision": "bab8e416ee9535caab2cb877beb4cf1f",
     "url": "/minesweeper/index.html"
   }
 ];
