@@ -37,6 +37,11 @@ const Board = props => {
   
   useEffect(()=>{
     setTiles(generateBoard(props.row, props.col, props.mines));
+    return () => {
+      console.log('cleanup');
+      setTiles([]);
+      setMinesLeft(0);
+    }
   },[])
 
   const gameOver = () => {
@@ -124,6 +129,33 @@ const Board = props => {
   const updateBoard = (x,y,num) => {
     tiles[x][y].isOpen = true;
     if (!num) openAdjacent(x,y);
+    // let count = openCount();
+    // console.log('openCount',count);
+    if (props.row*props.col-props.mines === openCount()) setGameStatus(2); //win
+  }
+
+  const openCount = () => {
+    // return tiles.filter(tile => tile.isOpen).length;
+    return tiles.reduce((sum,row) => {
+      return sum+row.reduce((innerSum,tile) => {
+        if (tile.isOpen) return innerSum+1;
+        return innerSum;
+      },0);
+    },0);
+  }
+
+  const displayGameStatus = () => {
+    if (gameStatus === 0) return 'Ongoing...';
+    if (gameStatus === 1) return 'Lost!';
+    if (gameStatus === 2) return 'Won!';
+  }
+
+  const setFlag = (flag) => {
+    if (flag) {
+      setMinesLeft(minesLeft-1);
+    } else {
+      setMinesLeft(minesLeft+1);
+    }
   }
 
   return (
@@ -131,7 +163,13 @@ const Board = props => {
       <div className="info-panel">
         <div className="timer"></div>
         <div className="new-game" onClick={props.newGame}>New Game</div>
-        <div className="quantity">{minesLeft}</div>
+        <div className="quantity">Mines Left: {minesLeft}</div>
+        <div>Game Status: {displayGameStatus()}</div>
+        {gameStatus > 0 && 
+          <div className="result">
+            You've {displayGameStatus()}
+          </div>
+        }
       </div>
       <div className="tile-container">
         {tiles.map((row,i) => {
@@ -151,6 +189,7 @@ const Board = props => {
                     openAdjacent={openAdjacent}
                     isOpen={tile.isOpen}
                     updateBoard={updateBoard}
+                    setFlag={setFlag}
                   />)
                 })
               }

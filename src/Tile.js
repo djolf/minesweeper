@@ -57,6 +57,7 @@ const Tile = props => {
     e.preventDefault();
     if (!isOpen && props.gameStatus===0) {
       setIsFlagged(!isFlagged);
+      props.setFlag(!isFlagged);
     }
   }
 
