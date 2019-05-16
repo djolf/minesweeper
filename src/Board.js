@@ -165,7 +165,6 @@ const Board = props => {
 
   const checkFlagsAndOpen = (x,y,num) => {
     let numFlags = checkFlags(x,y);
-    console.log(numFlags);
     if (numFlags === num) {
       openUnflagged(x,y);
     }
