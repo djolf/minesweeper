@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './Tile.scss';
 
 const Tile = props => {
-  const [isFlagged, setIsFlagged] = useState(false);
+  const [isFlagged, setIsFlagged] = useState(props.isFlagged);
   const [isOpen, setIsOpen] = useState(props.isOpen);
 
   useEffect(() => {
@@ -45,11 +45,9 @@ const Tile = props => {
       props.updateBoard(props.x,props.y,props.num);
       if (props.isBomb) {
         props.gameOver();
-      // } else {
-        // if (props.num===0) {
-        //   props.openAdjacent(props.x,props.y);
-        // }
       }
+    } else if (!props.isBomb && isOpen && props.num > 0) {
+      props.checkFlagsAndOpen(props.x,props.y,props.num);
     }
   }
 
@@ -57,7 +55,7 @@ const Tile = props => {
     e.preventDefault();
     if (!isOpen && props.gameStatus===0) {
       setIsFlagged(!isFlagged);
-      props.setFlag(!isFlagged);
+      props.setFlag(!isFlagged,props.x,props.y);
     }
   }
 

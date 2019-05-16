@@ -27,7 +27,8 @@ const Board = props => {
         let tile = {
           isBomb: bombs[index],
           key: index,
-          isOpen: false 
+          isOpen: false,
+          isFlagged: false,
         }
         index++;
         return tile;
@@ -150,12 +151,98 @@ const Board = props => {
     if (gameStatus === 2) return 'Won!';
   }
 
-  const setFlag = (flag) => {
+  const setFlag = (flag,x,y) => {
+    let tilesArr = [...tiles];
     if (flag) {
+      tilesArr[x][y].isFlagged = true;
       setMinesLeft(minesLeft-1);
     } else {
+      tilesArr[x][y].isFlagged = false;
       setMinesLeft(minesLeft+1);
     }
+    setTiles(tilesArr);
+  }
+
+  const checkFlagsAndOpen = (x,y,num) => {
+    let numFlags = checkFlags(x,y);
+    console.log(numFlags);
+    if (numFlags === num) {
+      openUnflagged(x,y);
+    }
+  }
+
+  const openUnflagged = (x,y) => {
+    let tilesArr = [...tiles];
+    //up
+    if (x>0 && !tilesArr[x-1][y].isOpen && !tilesArr[x-1][y].isFlagged) {
+      tilesArr[x-1][y].isOpen = true;
+    }
+    //down
+    if (x<props.row-1 && !tilesArr[x+1][y].isOpen && !tilesArr[x+1][y].isFlagged) {
+      tilesArr[x+1][y].isOpen = true;
+    }
+    //left
+    if (y>0 && !tilesArr[x][y-1].isOpen && !tilesArr[x][y-1].isFlagged) {
+      tilesArr[x][y-1].isOpen = true;
+    }
+    //right
+    if (y<props.col-1 && !tilesArr[x][y+1].isOpen && !tilesArr[x][y+1].isFlagged) {
+      tilesArr[x][y+1].isOpen = true;
+    }
+    //top left
+    if (x>0 && y>0 && !tilesArr[x-1][y-1].isOpen && !tilesArr[x-1][y-1].isFlagged) {
+      tilesArr[x-1][y-1].isOpen = true;
+    }
+    //top right
+    if (x>0 && y<props.col-1 && !tilesArr[x-1][y+1].isOpen && !tilesArr[x-1][y+1].isFlagged) {
+      tilesArr[x-1][y+1].isOpen = true;
+    }
+    //bottom left
+    if (x<props.row-1 && y>0 && !tilesArr[x+1][y-1].isOpen && !tilesArr[x+1][y-1].isFlagged) {
+      tilesArr[x+1][y-1].isOpen = true;
+    }
+    //bottom right
+    if (x<props.row-1 && y<props.col-1 && !tilesArr[x+1][y+1].isOpen && !tilesArr[x+1][y+1].isFlagged) {
+      tilesArr[x+1][y+1].isOpen = true;
+    }
+    setTiles(tilesArr);
+  }
+
+  const checkFlags = (x,y) => {
+    let count = 0;
+    //up
+    if (x>0 && tiles[x-1][y].isFlagged) {
+      count++;
+    }
+    //down
+    if (x<props.row-1 && tiles[x+1][y].isFlagged) {
+      count++;
+    }
+    //left
+    if (y>0 && tiles[x][y-1].isFlagged) {
+      count++;
+    }
+    //right
+    if (y<props.col-1 && tiles[x][y+1].isFlagged) {
+      count++;
+    }
+    //top left
+    if (x>0 && y>0 && tiles[x-1][y-1].isFlagged) {
+      count++;
+    }
+    //top right
+    if (x>0 && y<props.col-1 && tiles[x-1][y+1].isFlagged) {
+      count++;
+    }
+    //bottom left
+    if (x<props.row-1 && y>0 && tiles[x+1][y-1].isFlagged) {
+      count++;
+    }
+    //bottom right
+    if (x<props.row-1 && y<props.col-1 && tiles[x+1][y+1].isFlagged) {
+      count++;
+    }
+    return count;
   }
 
   return (
@@ -190,6 +277,7 @@ const Board = props => {
                     isOpen={tile.isOpen}
                     updateBoard={updateBoard}
                     setFlag={setFlag}
+                    checkFlagsAndOpen={checkFlagsAndOpen}
                   />)
                 })
               }
