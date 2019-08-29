@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import './Board.scss';
 import Tile from './Tile';
 
@@ -35,17 +35,23 @@ const Board = props => {
       });
     });
   }
-  
-  useEffect(()=>{
+
+  const [time, setTime] = useState(0);
+  let timer = useRef(false);
+
+  useLayoutEffect(()=>{
     setTiles(generateBoard(props.row, props.col, props.mines));
+    timer.current = setInterval(()=>setTime(t => t + 1), 1000);
     return () => {
       console.log('cleanup');
       setTiles([]);
       setMinesLeft(0);
+      clearInterval(timer.current);
     }
   },[])
 
   const gameOver = () => {
+    clearInterval(timer.current);
     setGameStatus(1);
   }
 
@@ -132,7 +138,10 @@ const Board = props => {
     if (!num) openAdjacent(x,y);
     // let count = openCount();
     // console.log('openCount',count);
-    if (props.row*props.col-props.mines === openCount()) setGameStatus(2); //win
+    if (props.row*props.col-props.mines === openCount()) {
+      clearInterval(timer.current);
+      setGameStatus(2);
+    } //win
   }
 
   const openCount = () => {
@@ -247,13 +256,15 @@ const Board = props => {
   return (
     <div className="game-wrapper">
       <div className="info-panel">
-        <div className="timer"></div>
+        <div className="timer">Time: {time}</div>
         <div className="new-game" onClick={props.newGame}>New Game</div>
         <div className="quantity">Mines Left: {minesLeft}</div>
         {/* <div>Game Status: {displayGameStatus()}</div> */}
         {gameStatus > 0 && 
           <div className="result">
             You've {displayGameStatus()}
+            <br/>
+            Time taken: {time} seconds
           </div>
         }
       </div>

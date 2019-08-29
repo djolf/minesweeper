@@ -7,9 +7,15 @@ const Game = props => {
   const [row, setRow] = useState(15);
   const [col, setCol] = useState(15);
   const [mines, setMines] = useState(30);
+  const [gameParams, setGameParams] = useState({
+    row, col, mines
+  })
 
 
   const newGame = () => {
+    setGameParams({
+      row, col, mines
+    })
     setGameId(gameId+1);
   }
 
@@ -39,7 +45,7 @@ const Game = props => {
           <input type="number" name="row" value={row} onChange={handleRowChange}/>
         </div>
       </div>
-      <Board row={row} col={col} mines={mines} key={gameId} newGame={newGame}></Board>
+      <Board {...gameParams} key={gameId} newGame={newGame}></Board>
     </div>
   );
 }

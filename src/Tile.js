@@ -50,9 +50,8 @@ const Tile = props => {
       props.checkFlagsAndOpen(props.x,props.y,props.num);
     }
   }
-
-  const rightClick = e => {
-    e.preventDefault();
+  
+  const rightClick = () => {
     if (!isOpen && props.gameStatus===0) {
       setIsFlagged(!isFlagged);
       props.setFlag(!isFlagged,props.x,props.y);
@@ -61,7 +60,13 @@ const Tile = props => {
 
   
   return (
-    <div className={getClasses()} onClick={click} onContextMenu={rightClick.bind(this)}>
+    <div className={getClasses()} 
+      onContextMenu={e => e.preventDefault()}
+      onMouseDown={ e => {
+        e.preventDefault();
+        if (e.button === 0) click();
+        else if (e.button === 2) rightClick();
+      } }>
       <span>{props.num}</span>
     </div>
   );
